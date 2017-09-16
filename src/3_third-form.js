@@ -40,17 +40,17 @@
     function Vector(points) {
         let vector = this instanceof Vector ? this : new Vector(points);
         Vector.attachValues(vector, points);
-        Vector.defineProperty(this, points, {
-            writeable: false,
-            value: value
-        });
+        
     
         return vector;
     }
 
+    
     Vector.attachValues = function(vector, points) {
-        vector.points = points;
-        points.forEach((value, index) => vector[index] = value);
+        points.forEach((value, index) => Object.defineProperty(vector, index, {
+            writable: false,
+            value: value
+        }));
     }
 
     Vector.prototype = {
