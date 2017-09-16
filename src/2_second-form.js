@@ -2,11 +2,7 @@
     'use strict';
 
     function greet(greeting) {
-        if (greeting !== undefined) {
-            return greeting + '!';
-        } else {
-            return 'Hello!';
-        }
+        return typeof greeting === "string" ? greeting + "!" : "Hello!";
     }
 
     function square(x) {
@@ -17,38 +13,37 @@
         return Math.sqrt(x);
     }
 
+    function add(a,b) {
+        return a + b;
+    }
+
     function sum(nums) {
         let result = 0;
 
-        for (let index = 0; index < nums.length; index += 1) {
-            result += nums[index];
-        }
-
+        nums.forEach((element) => result = add(result, element));
         return result;
     }
 
     function squareAll(nums) {
-        let result = [];
-
-        for (let index = 0; index < nums.length; index += 1) {
-            result[index] = square(nums[index]);
-        }
-
-        return result;
+        return nums.map(square);
     }
 
     function sumOfSquares(nums) {
-        let squares = squareAll(nums);
+        console.log(nums.valueOf);
+        let squares = nums.valueOf().map(square);
         return sum(squares);
     }
 
+    function Vector(points) {
+        this.points = points;
+        points.forEach((value, index) => this[index] = value);
+    }
+
+    Vector.prototype.valueOf = function() { return this.points.valueOf()}; 
+    Vector.prototype.toString = function() { return'<' + this.points.join(',') + '>'};
+
     function buildVector(points) {
-        let vector = points.slice(0);
-
-        vector.valueOf = function () { return points.slice(0); };
-        vector.toString = function () { return '<' + points.join(',') + '>'; };
-
-        return vector;
+        return new Vector(points);
     }
 
     function magnitude(vector) {
@@ -57,14 +52,7 @@
     }
 
     function getVectorsShorterThan(length, vectors) {
-        let result = [];
-
-        for (let index = 0; index < vectors.length; index += 1) {
-            if (magnitude(vectors[index]) < length) {
-                result[result.length] = vectors[index];
-            }
-        }
-
+        let result = vectors.filter(value => magnitude(value) < length );
         return result;
     }
 
