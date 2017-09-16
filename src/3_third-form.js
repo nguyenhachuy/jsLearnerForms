@@ -1,8 +1,15 @@
 (function () {
     'use strict';
 
+    function isType(typeName, value) {
+        return typeof value === typeName;
+    }
+
+    function eitherType(typeName, actualValue, defaultValue) {
+        return isType(typeName, actualValue) ? actualValue : defaultValue;
+    }
     function greet(greeting) {
-        return typeof greeting === 'string' ? greeting + '!' : 'Hello!';
+        return eitherType("string", greeting, "Hello") + "!";
     }
 
     function square(x) {
@@ -18,11 +25,7 @@
     }
 
     function sum(nums) {
-        let result = 0;
-
-        nums.forEach((value) => result = add(result, value));
-
-        return result;
+        return nums.reduce(add, 0);
     }
 
     function squareAll(nums) {
@@ -35,18 +38,24 @@
     }
 
     function Vector(points) {
-        this.points = points;
+        let vector = this instanceof Vector ? this : new Vector(points);
+        Vector.attachValues(vector, points);
+        Vector.defineProperty(this, points, {
+            writeable: false,
+            value: value
+        });
+    
+        return vector;
+    }
 
-        points.forEach((value, index) => this[index] = value);
+    Vector.attachValues = function(vector, points) {
+        vector.points = points;
+        points.forEach((value, index) => vector[index] = value);
     }
 
     Vector.prototype = {
         valueOf: function () { return this.points.valueOf(); },
         toString: function () { return '<' + this.points.join(',') + '>'; }
-    };
-
-    function buildVector(points) {
-        return new Vector(points);
     }
 
     function magnitude(vector) {
@@ -59,7 +68,7 @@
     }
 
     module.exports = {
-        buildVector: buildVector,
+        buildVector: Vector,
         getVectorsShorterThan: getVectorsShorterThan,
         greet: greet,
         magnitude: magnitude,

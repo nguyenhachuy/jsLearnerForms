@@ -52,8 +52,7 @@
     }
 
     function getVectorsShorterThan(length, vectors) {
-        let result = vectors.filter(value => magnitude(value) < length );
-        return result;
+        return vectors.filter(value => magnitude(value) < length );
     }
 
     module.exports = {
